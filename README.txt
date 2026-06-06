@@ -1,4 +1,4 @@
-TECH-PACK SIZE CHART EXTRACTOR  -  free web app
+SIZE CHART EXTRACTOR - free web app
 ================================================
 
 Goal: a public link where anyone can upload a tech-pack PDF and download

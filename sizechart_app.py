@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Tech-Pack Size Chart Extractor  -  desktop app
+Size Chart Extractor  -  desktop app
 ==============================================
 Pick a tech-pack PDF, click Convert, get an Excel size chart with the
 standard size run (2XS..4XL) and a grade-difference column after each size.
@@ -245,7 +245,7 @@ def run_gui():
     from tkinter import filedialog, messagebox, ttk
 
     root = tk.Tk()
-    root.title("Tech-Pack Size Chart Extractor")
+    root.title("Size Chart Extractor")
     root.geometry("560x340")
     root.minsize(520, 320)
 
@@ -254,7 +254,7 @@ def run_gui():
     status = tk.StringVar(value="Choose a tech-pack PDF to begin.")
 
     pad = {"padx": 14, "pady": 6}
-    tk.Label(root, text="Tech-Pack Size Chart Extractor",
+    tk.Label(root, text="Size Chart Extractor",
              font=("Arial", 15, "bold")).pack(anchor="w", **pad)
     tk.Label(root, text="Pick a PDF, choose where to save the Excel, then Convert.",
              fg="#555").pack(anchor="w", padx=14)
