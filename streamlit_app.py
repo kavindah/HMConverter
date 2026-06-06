@@ -47,8 +47,18 @@ st.info(
 if "uploader_id" not in st.session_state:
     st.session_state.uploader_id = 0
 
-pdf = st.file_uploader("Choose a tech-pack PDF", type=["pdf"],
-                       key=f"pdf_{st.session_state.uploader_id}")
+pdf = st.file_uploader(
+    "Choose a tech-pack PDF",
+    type=["pdf"],
+    key=f"pdf_{st.session_state.uploader_id}",
+    help=(
+        "🔒 Your document is secure:\n\n"
+        "• Processed entirely in RAM — never written to disk\n"
+        "• Raw PDF bytes are deleted from memory the moment the Excel is built\n"
+        "• No copy is kept on the server between sessions\n"
+        "• Use 'Clear file from this session' to wipe the result immediately"
+    ),
+)
 
 if pdf is not None and st.button("Convert to Excel", type="primary"):
     status = st.empty()
