@@ -1,6 +1,6 @@
 """
 Size Chart Extractor - web app (Streamlit)
-Upload a tech-pack PDF, download an Excel size chart.
+Upload a PDF, download an Excel size chart.
 The extraction engine lives in sizechart_app.py (imported below).
 """
 import io
@@ -14,13 +14,13 @@ st.set_page_config(page_title="Size Chart Extractor", page_icon="📏", layout="
 
 st.title("📏 Size Chart Extractor")
 st.write(
-    "Upload a tech-pack PDF and download an Excel size chart: the standard size "
+    "Upload a PDF and download an Excel size chart: the standard size "
     "run (2XS–4XL) with a grade-difference (Δ) column after each size, plus a "
     "sheet for the logo measurement set."
 )
 st.info("Your file is processed in memory to build the Excel and is not stored.", icon="🔒")
 
-pdf = st.file_uploader("Choose a tech-pack PDF", type=["pdf"])
+pdf = st.file_uploader("Choose a PDF", type=["pdf"])
 
 if pdf is not None:
     if st.button("Convert to Excel", type="primary"):

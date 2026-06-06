@@ -2,7 +2,7 @@
 """
 Size Chart Extractor  -  desktop app
 ==============================================
-Pick a tech-pack PDF, click Convert, get an Excel size chart with the
+Pick a PDF, click Convert, get an Excel size chart with the
 standard size run (2XS..4XL) and a grade-difference column after each size.
 
 Run it directly (needs Python + the requirements):
@@ -251,7 +251,7 @@ def run_gui():
 
     pdf_var = tk.StringVar()
     out_var = tk.StringVar()
-    status = tk.StringVar(value="Choose a tech-pack PDF to begin.")
+    status = tk.StringVar(value="Choose a PDF to begin.")
 
     pad = {"padx": 14, "pady": 6}
     tk.Label(root, text="Size Chart Extractor",
@@ -260,7 +260,7 @@ def run_gui():
              fg="#555").pack(anchor="w", padx=14)
 
     def pick_pdf():
-        p = filedialog.askopenfilename(title="Choose tech-pack PDF",
+        p = filedialog.askopenfilename(title="Choose PDF",
                                        filetypes=[("PDF files", "*.pdf")])
         if p:
             pdf_var.set(p)

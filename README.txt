@@ -1,7 +1,7 @@
 SIZE CHART EXTRACTOR - free web app
 ================================================
 
-Goal: a public link where anyone can upload a tech-pack PDF and download
+Goal: a public link where anyone can upload a PDF and download
 the Excel size chart. Hosted free on Streamlit Community Cloud.
 
 FILES
@@ -48,7 +48,7 @@ ALTERNATIVE FREE HOST: Hugging Face Spaces
 --------------------------------------------------------------------
 PRIVACY / CONFIDENTIALITY
 --------------------------------------------------------------------
-- The code in the repo contains no tech-pack data; users upload their own
+- The code in the repo contains no data; users upload their own
   PDFs at runtime and the app processes them in memory to build the Excel.
 - A public app means anyone with the link can use it and uploads go to the
   host's servers. If your tech packs are confidential, either keep the repo
