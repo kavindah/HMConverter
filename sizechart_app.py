@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Size Chart Extractor  -  desktop app
+Size Chart Extractor - desktop app
 ==============================================
 Pick a PDF, click Convert, get an Excel size chart with the
 standard size run (2XS..4XL) and a grade-difference column after each size.
@@ -10,6 +10,7 @@ Run it directly (needs Python + the requirements):
 or build a standalone Windows .exe / Mac .app with PyInstaller (see README).
 """
 
+import io
 import os
 import sys
 import re
@@ -224,8 +225,10 @@ def write_sheet(wb, set_name, bucket, style, first):
     ws.freeze_panes = ws.cell(row=hrow + 1, column=n_meta + 1)
 
 
-def convert(pdf_path, out_path, progress=lambda msg: None):
-    sets, style = extract(pdf_path, progress)
+def _build(pdf_source, progress=lambda msg: None):
+    """Shared builder. pdf_source may be a file path OR a file-like object
+    (e.g. BytesIO), so the PDF need never touch disk."""
+    sets, style = extract(pdf_source, progress)
     if not sets:
         raise ValueError("No size-chart tables were found in this PDF.")
     progress("Building Excel...")
@@ -233,8 +236,24 @@ def convert(pdf_path, out_path, progress=lambda msg: None):
     ordered = sorted(sets.keys(), key=lambda s: ("Logo" in s, s))
     for i, name in enumerate(ordered):
         write_sheet(wb, name, sets[name], style, first=(i == 0))
+    n = sum(len(sets[x]["order"]) for x in ordered)
+    return wb, ordered, n
+
+
+def convert(pdf_path, out_path, progress=lambda msg: None):
+    """Convert a PDF file on disk to an Excel file on disk."""
+    wb, ordered, n = _build(pdf_path, progress)
     wb.save(out_path)
-    return ordered, sum(len(sets[n]["order"]) for n in ordered)
+    return ordered, n
+
+
+def convert_to_bytes(pdf_source, progress=lambda msg: None):
+    """Convert fully IN MEMORY. pdf_source is a file-like object (BytesIO).
+    Returns (xlsx_bytes, sheets, count). Nothing is written to disk."""
+    wb, ordered, n = _build(pdf_source, progress)
+    bio = io.BytesIO()
+    wb.save(bio)
+    return bio.getvalue(), ordered, n
 
 
 # ===========================================================================
@@ -245,22 +264,22 @@ def run_gui():
     from tkinter import filedialog, messagebox, ttk
 
     root = tk.Tk()
-    root.title("Size Chart Extractor")
+    root.title(" Size Chart Extractor")
     root.geometry("560x340")
     root.minsize(520, 320)
 
     pdf_var = tk.StringVar()
     out_var = tk.StringVar()
-    status = tk.StringVar(value="Choose a PDF to begin.")
+    status = tk.StringVar(value="Choose a  PDF to begin.")
 
     pad = {"padx": 14, "pady": 6}
-    tk.Label(root, text="Size Chart Extractor",
+    tk.Label(root, text=" Size Chart Extractor",
              font=("Arial", 15, "bold")).pack(anchor="w", **pad)
     tk.Label(root, text="Pick a PDF, choose where to save the Excel, then Convert.",
              fg="#555").pack(anchor="w", padx=14)
 
     def pick_pdf():
-        p = filedialog.askopenfilename(title="Choose PDF",
+        p = filedialog.askopenfilename(title="Choose  PDF",
                                        filetypes=[("PDF files", "*.pdf")])
         if p:
             pdf_var.set(p)

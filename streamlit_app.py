@@ -1,55 +1,91 @@
 """
 Size Chart Extractor - web app (Streamlit)
-Upload a PDF, download an Excel size chart.
-The extraction engine lives in sizechart_app.py (imported below).
+Upload a  PDF, download an Excel size chart.
+
+Privacy: the PDF is processed entirely in memory (never written to the
+server's disk), the uploaded bytes are released as soon as the Excel is
+built, and a "Clear" button wipes the result and the uploaded file.
 """
 import io
-import os
-import tempfile
+import gc
 import streamlit as st
 
-from sizechart_app import convert  # reuses the same engine as the desktop app
+from sizechart_app import convert_to_bytes  # in-memory engine
 
 st.set_page_config(page_title="Size Chart Extractor", page_icon="📏", layout="centered")
 
-st.title("📏 Size Chart Extractor")
+# Hide Streamlit chrome: hamburger menu, "Made with Streamlit" footer, header bar
+st.markdown(
+    """
+    <style>
+      /* remove the entire top header (GitHub/fork badge, deploy, menu, status) */
+      [data-testid="stHeader"] {display: none !important;}
+      [data-testid="stToolbar"] {display: none !important;}
+      [data-testid="stToolbarActions"] {display: none !important;}
+      [data-testid="stAppDeployButton"] {display: none !important;}
+      [data-testid="stMainMenu"] {display: none !important;}
+      #MainMenu {visibility: hidden !important;}
+      header {visibility: hidden !important;}
+      footer {visibility: hidden !important;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+st.title("📏  Size Chart Extractor")
 st.write(
-    "Upload a PDF and download an Excel size chart: the standard size "
+    "Upload a  PDF and download an Excel size chart: the standard size "
     "run (2XS–4XL) with a grade-difference (Δ) column after each size, plus a "
     "sheet for the logo measurement set."
 )
-st.info("Your file is processed in memory to build the Excel and is not stored.", icon="🔒")
+st.info(
+    "Your PDF is processed in memory and is **never saved to the server**. "
+    "It is cleared from memory as soon as the Excel is built.",
+    icon="🔒",
+)
 
-pdf = st.file_uploader("Choose a PDF", type=["pdf"])
+# a counter we put in the uploader key so we can fully reset (drop) the upload
+if "uploader_id" not in st.session_state:
+    st.session_state.uploader_id = 0
 
-if pdf is not None:
-    if st.button("Convert to Excel", type="primary"):
-        status = st.empty()
+pdf = st.file_uploader("Choose a  PDF", type=["pdf"],
+                       key=f"pdf_{st.session_state.uploader_id}")
+
+if pdf is not None and st.button("Convert to Excel", type="primary"):
+    status = st.empty()
+    buf = io.BytesIO(pdf.getvalue())  # copy bytes into memory only
+    try:
         with st.spinner("Reading the PDF and building the chart..."):
-            with tempfile.TemporaryDirectory() as tmp:
-                in_path = os.path.join(tmp, "input.pdf")
-                out_path = os.path.join(tmp, "size_chart.xlsx")
-                with open(in_path, "wb") as f:
-                    f.write(pdf.getbuffer())
-                try:
-                    sheets, n = convert(in_path, out_path,
-                                        progress=lambda m: status.write(m))
-                    with open(out_path, "rb") as f:
-                        data = f.read()
-                except Exception as e:
-                    st.error(f"Could not convert this PDF: {e}")
-                    st.stop()
-        status.empty()
-        st.success(f"Done — {n} measurement points across {len(sheets)} sheet(s).")
-        base = os.path.splitext(pdf.name)[0]
-        st.download_button(
-            "⬇️ Download Excel",
-            data=data,
-            file_name=f"{base}_size_chart.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            type="primary",
-        )
-        st.caption("Open in Excel or Google Sheets — the Δ columns calculate on open.")
+            data, sheets, n = convert_to_bytes(buf, progress=lambda m: status.write(m))
+        st.session_state.xlsx = data
+        st.session_state.fname = pdf.name.rsplit(".", 1)[0] + "_size_chart.xlsx"
+        st.session_state.summary = f"{n} measurement points across {len(sheets)} sheet(s)."
+    except Exception as e:
+        st.error(f"Could not convert this PDF: {e}")
+    finally:
+        # release the in-memory PDF immediately
+        buf.close()
+        del buf
+        gc.collect()
+    status.empty()
+
+if "xlsx" in st.session_state:
+    st.success("Done — " + st.session_state.summary)
+    st.download_button(
+        "⬇️ Download Excel",
+        data=st.session_state.xlsx,
+        file_name=st.session_state.fname,
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        type="primary",
+    )
+    st.caption("Open in Excel or Google Sheets — the Δ columns calculate on open.")
+
+    if st.button("Clear file from this session"):
+        # wipe the result and drop the uploaded file from the widget
+        for k in ("xlsx", "fname", "summary"):
+            st.session_state.pop(k, None)
+        st.session_state.uploader_id += 1   # new key => uploader forgets the PDF
+        gc.collect()
+        st.rerun()
 
 st.divider()
 st.caption("Works on PDFs with real text tables. Scanned image-only PDFs need OCR and won't extract.")

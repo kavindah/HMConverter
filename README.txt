@@ -1,7 +1,7 @@
-SIZE CHART EXTRACTOR - free web app
+ SIZE CHART EXTRACTOR  -  free web app
 ================================================
 
-Goal: a public link where anyone can upload a PDF and download
+Goal: a public link where anyone can upload a  PDF and download
 the Excel size chart. Hosted free on Streamlit Community Cloud.
 
 FILES
@@ -48,9 +48,33 @@ ALTERNATIVE FREE HOST: Hugging Face Spaces
 --------------------------------------------------------------------
 PRIVACY / CONFIDENTIALITY
 --------------------------------------------------------------------
-- The code in the repo contains no data; users upload their own
-  PDFs at runtime and the app processes them in memory to build the Excel.
-- A public app means anyone with the link can use it and uploads go to the
-  host's servers. If your tech packs are confidential, either keep the repo
-  private and use Streamlit's per-app viewer allow-list, or host it only on
-  an internal/company machine instead of a public free host.
+- The PDF is processed ENTIRELY IN MEMORY. It is never written to the
+  server's disk. The uploaded bytes are released right after the Excel
+  is built, and the "Clear file from this session" button wipes the
+  result and drops the uploaded file from the page.
+- The code in the repo contains no  data; users upload their
+  own PDFs at runtime.
+- A public app still means anyone with the link can use it and uploads
+  travel to the host's servers (processed in RAM, not stored). If your
+  tech packs are confidential, either keep the repo private and use
+  Streamlit's per-app viewer allow-list, or host it only on an
+  internal/company machine instead of a public free host.
+
+--------------------------------------------------------------------
+HIDING REPO / OWNER INFO, THE FORK BUTTON, AND THE MENU
+--------------------------------------------------------------------
+1. Fork button + GitHub repo/owner badge (top-right): only shows when the
+   repo is PUBLIC. Keep the repo PRIVATE and it disappears for viewers.
+   Verify by opening your app link in an incognito/logged-out window -
+   when YOU are signed in to Streamlit you always see developer chrome.
+
+2. Deploy / Rerun / Settings / Clear-cache menu: hidden by the included
+   file  .streamlit/config.toml  ->  [client] toolbarMode = "viewer".
+   (Make sure that folder is committed to GitHub; files starting with a
+   dot are easy to miss when uploading.)
+
+3. "Made with Streamlit" footer and hamburger: also hidden via CSS at the
+   top of streamlit_app.py.
+
+4. Strongest privacy: in Streamlit Cloud, open your app's Settings ->
+   Sharing and add a viewer allow-list so only invited emails can open it.
