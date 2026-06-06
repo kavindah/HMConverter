@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Size Chart Extractor - desktop app
+Tech-Pack Size Chart Extractor  -  desktop app
 ==============================================
-Pick a PDF, click Convert, get an Excel size chart with the
+Pick a tech-pack PDF, click Convert, get an Excel size chart with the
 standard size run (2XS..4XL) and a grade-difference column after each size.
 
 Run it directly (needs Python + the requirements):
@@ -106,7 +106,7 @@ def extract(pdf_path, progress=lambda msg: None):
                         continue
                     if "code" not in roles or not sizes:
                         continue
-                    code = re.sub(r"\s+", "", row[roles["code"]] or "")
+                    code = re.sub(r"[\s*]+", "", row[roles["code"]] or "")  # drop whitespace and trailing * markers
                     if not CODE_RE.match(code):
                         continue
                     if current is None:
@@ -264,22 +264,22 @@ def run_gui():
     from tkinter import filedialog, messagebox, ttk
 
     root = tk.Tk()
-    root.title(" Size Chart Extractor")
+    root.title("Tech-Pack Size Chart Extractor")
     root.geometry("560x340")
     root.minsize(520, 320)
 
     pdf_var = tk.StringVar()
     out_var = tk.StringVar()
-    status = tk.StringVar(value="Choose a  PDF to begin.")
+    status = tk.StringVar(value="Choose a tech-pack PDF to begin.")
 
     pad = {"padx": 14, "pady": 6}
-    tk.Label(root, text=" Size Chart Extractor",
+    tk.Label(root, text="Tech-Pack Size Chart Extractor",
              font=("Arial", 15, "bold")).pack(anchor="w", **pad)
     tk.Label(root, text="Pick a PDF, choose where to save the Excel, then Convert.",
              fg="#555").pack(anchor="w", padx=14)
 
     def pick_pdf():
-        p = filedialog.askopenfilename(title="Choose  PDF",
+        p = filedialog.askopenfilename(title="Choose tech-pack PDF",
                                        filetypes=[("PDF files", "*.pdf")])
         if p:
             pdf_var.set(p)

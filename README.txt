@@ -1,7 +1,7 @@
- SIZE CHART EXTRACTOR  -  free web app
+TECH-PACK SIZE CHART EXTRACTOR  -  free web app
 ================================================
 
-Goal: a public link where anyone can upload a  PDF and download
+Goal: a public link where anyone can upload a tech-pack PDF and download
 the Excel size chart. Hosted free on Streamlit Community Cloud.
 
 FILES
@@ -52,7 +52,7 @@ PRIVACY / CONFIDENTIALITY
   server's disk. The uploaded bytes are released right after the Excel
   is built, and the "Clear file from this session" button wipes the
   result and drops the uploaded file from the page.
-- The code in the repo contains no  data; users upload their
+- The code in the repo contains no tech-pack data; users upload their
   own PDFs at runtime.
 - A public app still means anyone with the link can use it and uploads
   travel to the host's servers (processed in RAM, not stored). If your

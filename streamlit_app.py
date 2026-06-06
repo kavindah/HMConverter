@@ -1,6 +1,6 @@
 """
-Size Chart Extractor - web app (Streamlit)
-Upload a  PDF, download an Excel size chart.
+Tech-Pack Size Chart Extractor - web app (Streamlit)
+Upload a tech-pack PDF, download an Excel size chart.
 
 Privacy: the PDF is processed entirely in memory (never written to the
 server's disk), the uploaded bytes are released as soon as the Excel is
@@ -31,9 +31,9 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-st.title("📏  Size Chart Extractor")
+st.title("📏 Tech-Pack Size Chart Extractor")
 st.write(
-    "Upload a  PDF and download an Excel size chart: the standard size "
+    "Upload a tech-pack PDF and download an Excel size chart: the standard size "
     "run (2XS–4XL) with a grade-difference (Δ) column after each size, plus a "
     "sheet for the logo measurement set."
 )
@@ -47,7 +47,7 @@ st.info(
 if "uploader_id" not in st.session_state:
     st.session_state.uploader_id = 0
 
-pdf = st.file_uploader("Choose a  PDF", type=["pdf"],
+pdf = st.file_uploader("Choose a tech-pack PDF", type=["pdf"],
                        key=f"pdf_{st.session_state.uploader_id}")
 
 if pdf is not None and st.button("Convert to Excel", type="primary"):
