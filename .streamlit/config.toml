@@ -1,0 +1,5 @@
+[client]
+# Hide developer options (Deploy, Rerun, Settings, Clear cache) from all viewers
+toolbarMode = "viewer"
+# Don't leak stack traces / code paths to viewers if something errors
+showErrorDetails = false
