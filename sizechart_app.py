@@ -143,12 +143,12 @@ def num(v):
 
 FONT = "Arial"
 HDR_FILL = PatternFill("solid", fgColor="1F3864")
-DIFF_FILL = PatternFill("solid", fgColor="EEF1F7")
+DIFF_FILL = PatternFill("solid", fgColor="BDD7EE")
 HDR_FONT = Font(name=FONT, color="FFFFFF", bold=True, size=10)
 TITLE_FONT = Font(name=FONT, bold=True, size=11)
 CELL = Font(name=FONT, size=10)
 CODE = Font(name=FONT, size=10, bold=True)
-DIFF_FONT = Font(name=FONT, size=9, italic=True, color="7F7F7F")
+DIFF_FONT = Font(name=FONT, size=9, italic=True, color="1F497D")
 THIN = Side(style="thin", color="BFBFBF")
 BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
 CENTER = Alignment(horizontal="center", vertical="center")
