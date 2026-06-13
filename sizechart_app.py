@@ -3,7 +3,7 @@
 Tech-Pack Size Chart Extractor  -  desktop app
 ==============================================
 Pick a tech-pack PDF, click Convert, get an Excel size chart with the
-standard size run (2XS..4XL) and a grade-difference column after each size.
+standard size run (2XS..5XL) and a grade-difference column after each size.
 
 Run it directly (needs Python + the requirements):
     python sizechart_app.py
@@ -27,7 +27,7 @@ from openpyxl.utils import get_column_letter
 SIZE_RE = re.compile(r"^(2XS|XS|S|M|L|XL|2XL|3XL|4XL|5XL)(?:-(S|T|TT))?$")
 CODE_RE = re.compile(r"^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$")
 BASE_ORDER = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
-STD_RUN = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"]
+STD_RUN = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
 
 
 def norm(t):

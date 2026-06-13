@@ -34,7 +34,7 @@ st.markdown(
 st.title("📏 Tech-Pack Size Chart Extractor")
 st.write(
     "Upload a tech-pack PDF and download an Excel size chart: the standard size "
-    "run (2XS–4XL) with a grade-difference (Δ) column after each size, plus a "
+    "run (2XS–5XL) with a grade-difference (Δ) column after each size, plus a "
     "sheet for the logo measurement set."
 )
 st.info(
